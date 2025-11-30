@@ -1,6 +1,5 @@
 # 🛡️ ShieldProxy: High-Performance Reverse Proxy & WAF in Rust
 
-[![Rust Build](https://github.com/Gabryx412-Coder/ShieldProxy/actions/workflows/ci.yml/badge.svg)](https://github.com/Gabryx412-Coder/ShieldProxy/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-MIT%2FApache--2.0-blue.svg)](LICENSE)
 [![GitHub Stars](https://img.shields.io/github/stars/Gabryx412-Coder/ShieldProxy?style=social)](https://github.com/Gabryx412-Coder/ShieldProxy)
 
@@ -42,4 +41,5 @@ ShieldProxy intercetta il traffico in ingresso, esegue controlli di sicurezza e 
 
 ```bash
 git clone [https://github.com/Gabryx412-Coder/ShieldProxy.git](https://github.com/Gabryx412-Coder/ShieldProxy.git)
+
 cd ShieldProxy
