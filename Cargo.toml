@@ -6,21 +6,21 @@ authors = ["Gabryx412-Coder"]
 description = "High-performance Reverse Proxy with integrated WAF and Rate Limiting written in Rust."
 
 [dependencies]
-# ===== Core Async/Web Stack =====
+# ===== Core Async/Web Stack (Hyper V1 Compatible) =====
 tokio = { version = "1.36", features = ["full"] }
 
-# Axum è ora compatibile con Hyper v1.
+# Axum v0.7.x usa Hyper V1
 axum = { version = "0.7", features = ["http2", "macros"] }
-# Usiamo axum-server per TLS, ma rimuoviamo la dipendenza esplicita da hyper 1.2
-# L'errore è risolto aggiornando hyper-util e il body implicito.
-axum-server = { version = "0.6", features = ["tls-rustls"] } 
 
-# Necessario per garantire la compatibilità con il Body/Buffer
+# NECESSARIO: Aggiornare a 0.7 per la piena compatibilità con Axum 0.7/Hyper V1
+axum-server = { version = "0.7", features = ["tls-rustls"] } 
+
+# Requisiti di compatibilità Hyper V1 (lasciati espliciti per robustezza)
 hyper-util = { version = "0.1", features = ["full", "http1", "http2"] } 
 http-body-util = "0.1"
 bytes = "1.6"
 
-# Reqwest è il client usato per il forwarding
+# Client per il forwarding
 reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false } 
 
 # Layer per middleware Tower
