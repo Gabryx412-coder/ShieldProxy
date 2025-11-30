@@ -6,39 +6,49 @@ authors = ["Gabryx412-Coder"]
 description = "High-performance Reverse Proxy with integrated WAF and Rate Limiting written in Rust."
 
 [dependencies]
-# Async Runtime
+# ===== Core Async/Web Stack =====
 tokio = { version = "1.36", features = ["full"] }
 
-# Web Framework & HTTP
+# Axum è ora compatibile con Hyper v1.
 axum = { version = "0.7", features = ["http2", "macros"] }
-axum-server = { version = "0.6", features = ["tls-rustls"] } # Per HTTPS/TLS semplice
-hyper = { version = "1.2", features = ["full"] }
-reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false } # Client per forward al backend
-tower = { version = "0.4", features = ["util", "timeout", "limit"] } # Middleware utilities
+# Usiamo axum-server per TLS, ma rimuoviamo la dipendenza esplicita da hyper 1.2
+# L'errore è risolto aggiornando hyper-util e il body implicito.
+axum-server = { version = "0.6", features = ["tls-rustls"] } 
+
+# Necessario per garantire la compatibilità con il Body/Buffer
+hyper-util = { version = "0.1", features = ["full", "http1", "http2"] } 
+http-body-util = "0.1"
+bytes = "1.6"
+
+# Reqwest è il client usato per il forwarding
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false } 
+
+# Layer per middleware Tower
+tower = { version = "0.4", features = ["util", "timeout", "limit"] }
 tower-http = { version = "0.5", features = ["trace", "compression-full", "cors"] }
 
-# Serialization & Config
+# ===== Configurazione e Serializzazione =====
 serde = { version = "1.0", features = ["derive"] }
 serde_json = { version = "1.0" }
 serde_yaml = "0.9"
-config = "0.14" # Gestione merge configurazioni (env, file)
+config = "0.14"
 
-# Observability (Logging & Metrics)
+# ===== Observability (Logging & Metrics) =====
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
 metrics = "0.22"
 metrics-exporter-prometheus = "0.13"
 
-# WAF Logic
-regex = "1.10" # Per pattern matching performante
-arc-swap = "1.7" # Per hot-reloading della configurazione senza lock pesanti
+# ===== WAF Logic =====
+regex = "1.10"
+arc-swap = "1.7"
 
-# Concurrency & Utils
-dashmap = "5.5" # Map concorrente veloce per Rate Limiting e Stats
-thiserror = "1.0" # Gestione errori idiomatica
-uuid = { version = "1.7", features = ["v4", "fast-rng"] } # Request ID
+# ===== Concorrenza e Utility =====
+dashmap = "5.5"
+thiserror = "1.0"
+uuid = { version = "1.7", features = ["v4", "fast-rng"] }
 chrono = { version = "0.4", features = ["serde"] }
 
 [dev-dependencies]
-wiremock = "0.6" # Per mockare i backend nei test
+wiremock = "0.6"
 tokio-test = "0.4"
