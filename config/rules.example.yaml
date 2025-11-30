@@ -1,0 +1,31 @@
+rules:
+  - id: "1001"
+    name: "Block Basic SQL Injection"
+    category: "SQLi"
+    severity: "critical"
+    # Cerca pattern comuni come UNION SELECT, commenti SQL, o tautologie
+    pattern: "(?i)(union\\s+select|select\\s+.*\\s+from|drop\\s+table|--\\s)"
+    action: "block"
+
+  - id: "1002"
+    name: "Block Cross Site Scripting (XSS)"
+    category: "XSS"
+    severity: "high"
+    # Cerca tag script o gestori eventi inline
+    pattern: "(?i)(<script|javascript:|onload=|onerror=)"
+    action: "block"
+
+  - id: "1003"
+    name: "Block Path Traversal"
+    category: "LFI"
+    severity: "high"
+    # Cerca tentativi di risalire le directory
+    pattern: "(\\.\\./\\.\\./|/etc/passwd|/windows/win.ini)"
+    action: "block"
+
+  - id: "1004"
+    name: "Block Shellshock"
+    category: "RCE"
+    severity: "critical"
+    pattern: "\\(\\) \\{\\s*:;\\s*\\};"
+    action: "block"

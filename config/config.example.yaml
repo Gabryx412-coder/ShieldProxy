@@ -1,0 +1,46 @@
+# ===== CONFIGURAZIONE GENERALE =====
+server:
+  host: "0.0.0.0"
+  port: 8443
+  # Abilitare TLS per HTTPS
+  tls:
+    enabled: true
+    cert_path: "config/certs/cert.pem"
+    key_path: "config/certs/key.pem"
+
+# ===== DEFINIZIONE BACKEND (UPSTREAMS) =====
+# Il proxy effettuerà load balancing round-robin su questi target
+backends:
+  - name: "main_service"
+    urls:
+      - "http://127.0.0.1:8080"
+      - "http://127.0.0.1:8081"
+    timeout_ms: 5000
+    health_check_path: "/health"
+
+# ===== WEB APPLICATION FIREWALL (WAF) =====
+waf:
+  enabled: true
+  mode: "block" # Opzioni: "monitor" (logga solo), "block" (403)
+  rules_file: "config/rules.example.yaml"
+
+# ===== RATE LIMITING =====
+ratelimit:
+  enabled: true
+  requests_per_window: 100
+  window_seconds: 60
+  # Whitelist opzionale per IP fidati
+  whitelist:
+    - "127.0.0.1"
+    - "192.168.1.50"
+
+# ===== OBSERVABILITY =====
+logging:
+  level: "info" # debug, info, warn, error
+  format: "json" # json o pretty
+
+dashboard:
+  enabled: true
+  port: 9090 # Porta dedicata per metriche e dashboard interna
+  user: "admin"
+  pass_hash: "sha256_hash_here" # Implementeremo auth base

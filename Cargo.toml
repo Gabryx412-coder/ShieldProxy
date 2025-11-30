@@ -1,0 +1,44 @@
+[package]
+name = "shield-proxy"
+version = "0.1.0"
+edition = "2021"
+authors = ["Gabryx412-Coder"]
+description = "High-performance Reverse Proxy with integrated WAF and Rate Limiting written in Rust."
+
+[dependencies]
+# Async Runtime
+tokio = { version = "1.36", features = ["full"] }
+
+# Web Framework & HTTP
+axum = { version = "0.7", features = ["http2", "macros"] }
+axum-server = { version = "0.6", features = ["tls-rustls"] } # Per HTTPS/TLS semplice
+hyper = { version = "1.2", features = ["full"] }
+reqwest = { version = "0.12", features = ["json", "rustls-tls"], default-features = false } # Client per forward al backend
+tower = { version = "0.4", features = ["util", "timeout", "limit"] } # Middleware utilities
+tower-http = { version = "0.5", features = ["trace", "compression-full", "cors"] }
+
+# Serialization & Config
+serde = { version = "1.0", features = ["derive"] }
+serde_json = { version = "1.0" }
+serde_yaml = "0.9"
+config = "0.14" # Gestione merge configurazioni (env, file)
+
+# Observability (Logging & Metrics)
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+metrics = "0.22"
+metrics-exporter-prometheus = "0.13"
+
+# WAF Logic
+regex = "1.10" # Per pattern matching performante
+arc-swap = "1.7" # Per hot-reloading della configurazione senza lock pesanti
+
+# Concurrency & Utils
+dashmap = "5.5" # Map concorrente veloce per Rate Limiting e Stats
+thiserror = "1.0" # Gestione errori idiomatica
+uuid = { version = "1.7", features = ["v4", "fast-rng"] } # Request ID
+chrono = { version = "0.4", features = ["serde"] }
+
+[dev-dependencies]
+wiremock = "0.6" # Per mockare i backend nei test
+tokio-test = "0.4"
