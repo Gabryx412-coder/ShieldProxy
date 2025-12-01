@@ -1,6 +1,7 @@
 use metrics::{histogram, increment_counter};
 use std::time::Instant;
 
+// Costanti
 pub const HTTP_REQUESTS_TOTAL: &str = "shield_requests_total";
 pub const HTTP_REQUEST_DURATION: &str = "shield_request_duration_seconds";
 pub const WAF_BLOCKS: &str = "shield_waf_blocks_total";
@@ -12,9 +13,9 @@ pub fn track_request(method: &str, status: u16, start: Instant) {
 
     histogram!(
         HTTP_REQUEST_DURATION,
-        duration, 
+        duration,
         "method" => method.to_string(),
-        "status" => status.to_string()
+        "status" => status.to_string() 
     );
 
 
